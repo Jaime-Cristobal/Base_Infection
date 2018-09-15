@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -16,6 +18,7 @@ import com.mygdx.baseinfec.ui.Scaler;
  * Created by FlapJack on 7/22/2017.
  *
  * Only to be used for animated sprites packed into textureatlas.
+ *
  */
 
 public final class Animator
@@ -32,8 +35,7 @@ public final class Animator
 
     private String file;
 
-    private float width = 0;
-    private float height = 0;
+    private float width, height, originWidth, originHeight = 0;
     private int box2dScale = 0;
 
     public Animator(String file, Main main)
@@ -80,6 +82,9 @@ public final class Animator
 
         width = main.assetmanager.manager.get(file, TextureAtlas.class).getRegions().first().packedWidth * scale_width;
         height = main.assetmanager.manager.get(file, TextureAtlas.class).getRegions().first().packedHeight * scale_height;
+
+        originWidth = width / 2;
+        originHeight = height / 2;
     }
 
     /**For setting region */
@@ -92,9 +97,22 @@ public final class Animator
         {
             width = main.assetmanager.manager.get(file, TextureAtlas.class).getRegions().first().packedWidth * scale_width;
             height = main.assetmanager.manager.get(file, TextureAtlas.class).getRegions().first().packedHeight * scale_height;
+
+            originWidth = width / 2;
+            originHeight = height / 2;
         }
     }
 
+    public void setOrigin(float originWidth, float originHeight)
+    {
+        this.originWidth = originWidth;
+        this.originHeight = originHeight;
+    }
+
+    /**
+     * NOTE: Should be considered for a name change.
+     * @param call will set the a
+     * */
     public void findRegion(String call)
     {
         int n = 0;
@@ -121,6 +139,24 @@ public final class Animator
                 ((x * Scaler.PIXELS_TO_METERS) - width/2) + box2dScale,
                 (y * Scaler.PIXELS_TO_METERS) - height/2,
                 width, height);
+    }
+
+    /**
+     * @param angle should be in DEGREES!
+     * */
+    public void render(Batch batch, float x, float y, float angle)
+    {
+        elapsed_time += Gdx.graphics.getDeltaTime();
+
+        if(angle < 0)
+        {
+            angle += 360;
+        }
+
+        batch.draw((TextureRegion) animation.get(playback).getKeyFrame(elapsed_time, true),
+                ((x * Scaler.PIXELS_TO_METERS) - width/2) + box2dScale,
+                (y * Scaler.PIXELS_TO_METERS) - height/2,
+                width / 2, height / 2, width, height, 1f, 1f, angle, false);
     }
 
     public void recordEndTime()
@@ -157,6 +193,11 @@ public final class Animator
         width *= -1;
 
         box2dScale = val;
+    }
+
+    public boolean ifFinished()
+    {
+        return animation.get(playback).isAnimationFinished(elapsed_time);
     }
 
     public void setPosScale(int val)

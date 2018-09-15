@@ -11,8 +11,5 @@ package com.mygdx.baseinfec.collision;
  * */
 public final class HitboxID
 {
-    public enum ID
-    {
-        player, lowerMob, midMob, higherMob, base, items;
-    }
+    public static final int player = 1, lowMob = 2, midMob = 3, highMob = 4, base = 5, item = 6;
 }

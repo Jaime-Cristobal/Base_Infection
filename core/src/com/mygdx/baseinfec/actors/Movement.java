@@ -10,32 +10,18 @@ import com.mygdx.baseinfec.ui.Scaler;
  * Created by seacow on 12/17/2017.
  */
 
-public class Movement
+public final class Movement
 {
-    private float vertical;
-    private float horizontal;
+    private float vertical = 0;
+    private float horizontal = 1;
 
-    private float xMin;
-    private float xMax;
-    private float yMin;
-    private float yMax;
-    private float limit;
+    private float xMin = 0;
+    private float xMax = 0;
+    private float yMin = 0;
+    private float yMax = 0;
+    private float limit = 0;
 
-    private boolean justRespawned;
-
-    public Movement()
-    {
-        vertical = 0;
-        horizontal = 1;
-
-        xMin = 0;
-        xMax = 0;
-        yMin = 0;
-        yMax = 0;
-        limit = 0;
-
-        justRespawned = false;
-    }
+    private boolean justRespawned = false;
 
     /**these values will be needed for respawning*/
     public void setSpawn(float xmin, float xmax, float ymin, float ymax)

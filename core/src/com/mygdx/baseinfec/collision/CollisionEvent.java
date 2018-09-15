@@ -1,22 +1,46 @@
-package com.mygdx.baseinfec.mechanic;
+package com.mygdx.baseinfec.collision;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-public class Collision implements ContactListener
+/**
+ * Created by seacow on 11/8/2017.
+ */
+
+public final class CollisionEvent implements ContactListener
 {
+    private Object userDataA, userDataB = null;
+
+    public ContactListener getContactListener()
+    {
+        return this;
+    }
+
+    public boolean ifContact(Object id1, Object id2)
+    {
+        return (id1.equals(userDataA) && id2.equals(userDataB)) ||
+                (id1.equals(userDataB) && id2.equals(userDataA));
+    }
+
     /** Called when two fixtures begin to touch. */
     public void beginContact (Contact contact)
     {
+        Gdx.app.log("Contact", "begin");
 
+        userDataA = contact.getFixtureA().getUserData();
+        userDataB = contact.getFixtureB().getUserData();
     }
 
     /** Called when two fixtures cease to touch. */
     public void endContact (Contact contact)
     {
+        Gdx.app.log("Contact", "end");
 
+        userDataA = null;
+        userDataB = null;
     }
 
     /*

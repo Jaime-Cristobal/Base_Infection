@@ -37,19 +37,24 @@ public class Asset
     private void Loadfiles()
     {
         manager.load("generic1.png", Texture.class);
-        manager.load("map2.png", Texture.class);
-        manager.load("map3.png", Texture.class);
         manager.load("player2.png", Texture.class);
         manager.load("player3.png", Texture.class);
         manager.load("box.png", Texture.class);
         manager.load("fort.png", Texture.class);
         manager.load("base.png", Texture.class);
-        manager.load("map1.png", Texture.class);
         manager.load("player1.png", Texture.class);
+        manager.load("rocket_lvl_1.png", Texture.class);
+        manager.load("map56.png", Texture.class);
 
         manager.load("player.atlas", TextureAtlas.class);
         manager.load("fx1.atlas", TextureAtlas.class);
         manager.load("player4.atlas", TextureAtlas.class);
+        manager.load("player5.atlas", TextureAtlas.class);
+        manager.load("fire_anim.atlas", TextureAtlas.class);
+        manager.load("whale_player.atlas", TextureAtlas.class);
+        manager.load("splash_01.atlas", TextureAtlas.class);
+        manager.load("splash_02.atlas", TextureAtlas.class);
+        manager.load("splash_03.atlas", TextureAtlas.class);
 
         manager.load("skin/flat-earth-ui.json", Skin.class);
 

@@ -1,0 +1,61 @@
+
+player5.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Armature_animtion0
+  rotate: false
+  xy: 1, 105
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 0
+Armature_animtion0
+  rotate: false
+  xy: 1, 1
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 1
+Armature_animtion0
+  rotate: false
+  xy: 138, 105
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 2
+Armature_animtion0
+  rotate: false
+  xy: 138, 1
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 3
+Armature_animtion0
+  rotate: false
+  xy: 275, 105
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 4
+Armature_animtion0
+  rotate: false
+  xy: 275, 1
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 5
+Armature_animtion0
+  rotate: false
+  xy: 412, 105
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 6
+Armature_animtion0
+  rotate: false
+  xy: 412, 1
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: 7

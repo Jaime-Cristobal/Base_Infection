@@ -29,7 +29,8 @@ public class Splash
         region = new ArrayMap<String, Float>();
         region.put("Armature_splash", 3.7f);
 
-        splash = new Animator("splash.atlas", region, main.assetmanager.manager);
+        splash = new Animator("splash.atlas", main);
+        splash.setRegion(region);
         splash.setScale(44, 21);
         splash.findRegion("Armature_splash");
 

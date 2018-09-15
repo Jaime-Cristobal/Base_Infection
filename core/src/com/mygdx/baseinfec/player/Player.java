@@ -17,8 +17,10 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.baseinfec.Main;
 import com.mygdx.baseinfec.actors.creation.CreateAnimation;
 import com.mygdx.baseinfec.actors.creation.CreateTexture;
+import com.mygdx.baseinfec.animator.Animator;
 import com.mygdx.baseinfec.collision.FilterDetector;
 import com.mygdx.baseinfec.collision.FilterID;
+import com.mygdx.baseinfec.collision.HitboxID;
 import com.mygdx.baseinfec.ui.Scaler;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -28,19 +30,22 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
  * Created by FlapJack on 7/22/2017.
  *
  * just have a lever in hud to turn the player in a direction
+ *
+ * Player sprites have to be facing down in order to move with the
+ * direction the player's frontal area is facing.
  */
 
 public class Player implements GestureListener, InputProcessor
 {
     private final Main main;
 
+    private Animator fire;
+
     private CreateAnimation actor;
     private ArrayMap<String, Float> region = new ArrayMap<String, Float>();
     private InputControl controls;
 
     private ArrayMap<String, Float> frames;
-
-    private OrthographicCamera camera;
 
     private String file;
     private float originX;
@@ -67,23 +72,21 @@ public class Player implements GestureListener, InputProcessor
     public Player(Main main_p)
     {
         this.main = main_p;
-        file = "player4.atlas";
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.update();
+        //file = "player4.atlas";
+        file = "whale_player.atlas";
 
         controls = new InputControl();
 
         originX = 0;
         originY = 0;
 
-        frames = new ArrayMap<String, Float>();
-        frames.put("Armature_down", 3.4f, 0);
+        actor = new CreateAnimation(file, main, BodyDef.BodyType.DynamicBody);
+        actor.addRegion("Armature_move", 3.0f);
 
-        region.put("Armature_animtion0", 3.5f, 0);
-
-        actor = new CreateAnimation(file, region, main, BodyDef.BodyType.DynamicBody);
+        fire = new Animator("splash_01.atlas", main);
+        fire.addRegion("Anim_splash", 4.5f);
+        fire.findRegion("Anim_splash");
+        fire.setOrigin(fire.getWidth() - 1, fire.getHeight() / 2);
     }
 
     public void createBody(World world, float posX, float posY, float w, float h)
@@ -93,10 +96,9 @@ public class Player implements GestureListener, InputProcessor
                 | FilterID.coin_category | FilterID.collector_category | FilterID.bandit_category));
 
         actor.setData(0.5f, 0, true);
-        actor.setUniqueID(1);
+        actor.setUniqueID(HitboxID.player);
         actor.create(world, posX, posY, w, h, false);
-        actor.setRegion("Armature_animtion0");
-        //actor.setRegion("Armature_down");
+        actor.setRegion("Armature_move");
     }
 
     public void display(int playerInput, float delta, int rotate, int speed, Vector3 target, int direc)
@@ -120,6 +122,7 @@ public class Player implements GestureListener, InputProcessor
                 break;
             case 3:
                 velocity += 10;
+                //fire.render(main.batch, actor.getX(), actor.getY());
                 break;
             case 4:
                 velocity = 0;
@@ -135,7 +138,12 @@ public class Player implements GestureListener, InputProcessor
         actor.getBody().setLinearVelocity(MathUtils.cos(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity,
                 MathUtils.sin(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity);
 
-        actor.display();
+        actor.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+        //actor.display();
+
+        //fire.render(main.batch, actor.getX() - 7, actor.getY() - 0.5f, actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+
+        //Gdx.app.log("Velocity", "" + actor.getBody().getPosition());
     }
 
     public Vector2 returnCoord()

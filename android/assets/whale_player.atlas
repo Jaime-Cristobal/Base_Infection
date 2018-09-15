@@ -1,0 +1,68 @@
+
+whale_player.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Armature_move
+  rotate: false
+  xy: 1, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 0
+Armature_move
+  rotate: false
+  xy: 95, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 1
+Armature_move
+  rotate: false
+  xy: 189, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 2
+Armature_move
+  rotate: false
+  xy: 283, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 3
+Armature_move
+  rotate: false
+  xy: 377, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 4
+Armature_move
+  rotate: false
+  xy: 471, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 5
+Armature_move
+  rotate: false
+  xy: 565, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 6
+Armature_move
+  rotate: false
+  xy: 659, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 7
+Armature_move
+  rotate: false
+  xy: 753, 1
+  size: 92, 156
+  orig: 92, 156
+  offset: 0, 0
+  index: 8

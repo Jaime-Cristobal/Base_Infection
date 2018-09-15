@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.baseinfec.Main;
 import com.mygdx.baseinfec.actors.creation.CreateActor;
 import com.mygdx.baseinfec.actors.creation.CreateTexture;
+import com.mygdx.baseinfec.collision.FilterID;
 
 public class Bases
 {

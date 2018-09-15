@@ -40,7 +40,21 @@ public class CreateAnimation implements CreateActor
         this(file, main);
 
         box2dBody = new CreateBody(type);
-        animate = new Animator(this.file, region, main.assetmanager.manager);
+        animate = new Animator(this.file, main);
+        animate.setRegion(region);
+    }
+
+    public CreateAnimation(String file, Main main, BodyDef.BodyType type)
+    {
+        this(file, main);
+
+        box2dBody = new CreateBody(type);
+        animate = new Animator(this.file, main);
+    }
+
+    public void addRegion(String regionName, float frameSpeed)
+    {
+        animate.addRegion(regionName, frameSpeed);
     }
 
     /**Use this with a contact filtering class*/
@@ -80,6 +94,11 @@ public class CreateAnimation implements CreateActor
     public void display()
     {
         animate.render(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y);
+    }
+
+    public void display(float angle)
+    {
+        animate.render(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y, angle);
     }
 
     /**false sets the box2D body to sleep (unmovable)*/

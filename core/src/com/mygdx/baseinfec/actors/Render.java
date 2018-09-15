@@ -13,13 +13,12 @@ import com.mygdx.baseinfec.ui.Scaler;
  * Renders textures; rendering animated sprites are in Animate
  */
 
-public class Render
+public final class Render
 {
-    public OrthographicCamera camera;
+    public OrthographicCamera camera = new OrthographicCamera();
 
     public Render()
     {
-        camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
     }

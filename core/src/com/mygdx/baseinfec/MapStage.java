@@ -17,14 +17,13 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.mygdx.baseinfec.collision.HitboxID;
 import com.mygdx.baseinfec.mechanic.Bases;
 import com.mygdx.baseinfec.mechanic.Builder;
-import com.mygdx.baseinfec.actors.enemies.LowMob;
+import com.mygdx.baseinfec.actors.enemies.Mob;
 import com.mygdx.baseinfec.actors.HUD;
 import com.mygdx.baseinfec.actors.creation.CreateAnimation;
+import com.mygdx.baseinfec.mechanic.EventManager;
 import com.mygdx.baseinfec.player.Player;
-import com.mygdx.baseinfec.ui.Scaler;
 
 import box2dLight.ConeLight;
 import box2dLight.PointLight;
@@ -55,7 +54,7 @@ public class MapStage implements Screen
     final private ArrayMap<String, Float> region = new ArrayMap<String, Float>();
     final private Builder builder;
     final private Bases base;
-    final private LowMob lowMob;
+    final private Mob mob;
 
     final private float lerp  = 0.1f;
     private Vector3 camPosition;
@@ -68,7 +67,7 @@ public class MapStage implements Screen
         this.main = main;
 
         player = new Player(main);
-        player.createBody(world, 200, 550, 53, 43);
+        player.createBody(world, 200, 550, 78, 43);
 
         hud = new HUD(main, world, viewport);
 
@@ -88,7 +87,7 @@ public class MapStage implements Screen
 
         builder = new Builder(main, world);
         base = new Bases(main, world);
-        lowMob = new LowMob(main, world, 20);
+        mob = new Mob(main, world, 20);
     }
 
     /** Called when this screen becomes the current screen for a {@link Game}. */
@@ -103,8 +102,10 @@ public class MapStage implements Screen
 
         player.getBody().setUserData(1);
 
-        lowMob.spawnRandomly(120, 300, 390, 600, 10);
-        lowMob.setTarget(base.getRandomPos());
+        mob.spawnRandomly(50, 300, 350, 700, 10);
+        mob.setTarget(base.getRandomPos());
+
+        world.setContactListener(EventManager.getContactListener());
     }
 
     /** Called when the screen should render itself.
@@ -118,15 +119,15 @@ public class MapStage implements Screen
         main.batch.setProjectionMatrix( viewport.getCamera().combined);                    //allows camera to move
         ray.setCombinedMatrix(viewport.getCamera().combined);
 
-        debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
+        //debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
 
         camMovement(delta);
         viewport.getCamera().update();
 
         main.batch.begin();
-        main.batch.draw((Texture)main.assetmanager.getFile("map2.png"), -100, 0, 4096, 4096);
-        lowMob.setSpeed();
-        lowMob.render();
+        main.batch.draw((Texture)main.assetmanager.getFile("map56.png"), -100, 0, 4096, 4096);
+        mob.setSpeed();
+        mob.render(main);
         player.display(hud.getInput(), delta, hud.getRotate(), hud.getSpeed(), hud.getTarget(), hud.getDirection());
         fx.display();
         builder.render();
@@ -160,7 +161,7 @@ public class MapStage implements Screen
         ray.updateAndRender();
         hud.render(main, camPosition, player.getX(), player.getY(), player.getVelocity());
 
-        debugRenderer.render(world, debugMatrix);
+        //debugRenderer.render(world, debugMatrix);
     }
 
     /** @see ApplicationListener#resize(int, int) */

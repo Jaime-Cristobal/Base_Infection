@@ -1,0 +1,40 @@
+
+splash_03.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Anim_splash
+  rotate: false
+  xy: 1, 1
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: 0
+Anim_splash
+  rotate: false
+  xy: 153, 1
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: 1
+Anim_splash
+  rotate: false
+  xy: 305, 1
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: 2
+Anim_splash
+  rotate: false
+  xy: 457, 1
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: 3
+Anim_splash
+  rotate: false
+  xy: 609, 1
+  size: 150, 135
+  orig: 150, 135
+  offset: 0, 0
+  index: 4
