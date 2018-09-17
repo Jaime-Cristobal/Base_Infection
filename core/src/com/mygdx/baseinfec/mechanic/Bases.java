@@ -25,7 +25,7 @@ public class Bases
             base.add(new CreateTexture("base.png", main, BodyDef.BodyType.DynamicBody));
             base.get(n).setData(1, 0, false);
             base.get(n).setUniqueID("base" + n);
-            base.get(n).create(world, MathUtils.random(800, 3200), MathUtils.random(800, 3200),
+            base.get(n).create(world, MathUtils.random(300, 1900), MathUtils.random(300, 1900),
                     149, 134, false);
             base.get(n).setNoGravity();
         }

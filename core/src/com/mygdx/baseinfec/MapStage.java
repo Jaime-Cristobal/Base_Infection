@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,8 +16,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.mygdx.baseinfec.actors.creation.CreateBody;
+import com.mygdx.baseinfec.animator.Animator;
+import com.mygdx.baseinfec.collision.FilterID;
 import com.mygdx.baseinfec.mechanic.Bases;
 import com.mygdx.baseinfec.mechanic.Builder;
 import com.mygdx.baseinfec.actors.enemies.Mob;
@@ -24,6 +29,7 @@ import com.mygdx.baseinfec.actors.HUD;
 import com.mygdx.baseinfec.actors.creation.CreateAnimation;
 import com.mygdx.baseinfec.mechanic.EventManager;
 import com.mygdx.baseinfec.player.Player;
+import com.mygdx.baseinfec.ui.Scaler;
 
 import box2dLight.ConeLight;
 import box2dLight.PointLight;
@@ -55,9 +61,13 @@ public class MapStage implements Screen
     final private Builder builder;
     final private Bases base;
     final private Mob mob;
+    final private CreateAnimation rock_01;
+    private float angle = 0;
 
     final private float lerp  = 0.1f;
     private Vector3 camPosition;
+
+    private Array<CreateBody> sides = new Array<CreateBody>();
 
     final private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     private Matrix4 debugMatrix;
@@ -88,6 +98,30 @@ public class MapStage implements Screen
         builder = new Builder(main, world);
         base = new Bases(main, world);
         mob = new Mob(main, world, 20);
+
+        for(int n = 0; n < 4; n++)
+        {
+            sides.add(new CreateBody(BodyDef.BodyType.StaticBody));
+            sides.get(n).setData(1, 0, true);
+            sides.get(n).setFilter(FilterID.floor_category, FilterID.player_category);
+        }
+
+        sides.get(0).create(world, 800, 0, 2500, 20, false);       //bottom blocker
+        sides.get(1).create(world, 700, 2050, 2500, 20, false);    //top
+        sides.get(2).create(world, -100, 1200, 20, 2500, false);   //left
+        sides.get(3).create(world, 1950, 1000, 20, 2500, false);   //right
+
+
+        for(CreateBody iter : sides)
+            iter.setActive(true);
+
+        rock_01 = new CreateAnimation("rock_01.atlas", main, BodyDef.BodyType.DynamicBody);
+        rock_01.addRegion("Armature_wave", 3.2f);
+        rock_01.setData(1, 0, false);
+        rock_01.setFilter(FilterID.platform_category, FilterID.player_category);
+        rock_01.setUniqueID(5);
+        rock_01.create(world, 140, 90, 769, 729, false);
+        rock_01.setSpeed(10, 10);
     }
 
     /** Called when this screen becomes the current screen for a {@link Game}. */
@@ -119,19 +153,26 @@ public class MapStage implements Screen
         main.batch.setProjectionMatrix( viewport.getCamera().combined);                    //allows camera to move
         ray.setCombinedMatrix(viewport.getCamera().combined);
 
-        //debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
+        debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
 
         camMovement(delta);
         viewport.getCamera().update();
 
         main.batch.begin();
-        main.batch.draw((Texture)main.assetmanager.getFile("map56.png"), -100, 0, 4096, 4096);
+        main.batch.draw((Texture)main.assetmanager.getFile("map58.png"), -300, -350, 3072, 3072);
         mob.setSpeed();
         mob.render(main);
-        player.display(hud.getInput(), delta, hud.getRotate(), hud.getSpeed(), hud.getTarget(), hud.getDirection());
+        player.display(hud.getInput(), delta);
         fx.display();
         builder.render();
         base.render();
+
+        if(angle > 180)
+            angle = 0;
+
+        angle += 0.05f;
+
+        rock_01.display(angle);
 
         hud.renderSprite(main);
         main.batch.end();
@@ -161,7 +202,7 @@ public class MapStage implements Screen
         ray.updateAndRender();
         hud.render(main, camPosition, player.getX(), player.getY(), player.getVelocity());
 
-        //debugRenderer.render(world, debugMatrix);
+        debugRenderer.render(world, debugMatrix);
     }
 
     /** @see ApplicationListener#resize(int, int) */

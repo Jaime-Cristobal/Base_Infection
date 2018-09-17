@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -44,7 +45,7 @@ public class Asset
         manager.load("base.png", Texture.class);
         manager.load("player1.png", Texture.class);
         manager.load("rocket_lvl_1.png", Texture.class);
-        manager.load("map56.png", Texture.class);
+        manager.load("map58.png", Texture.class);
 
         manager.load("player.atlas", TextureAtlas.class);
         manager.load("fx1.atlas", TextureAtlas.class);
@@ -55,8 +56,10 @@ public class Asset
         manager.load("splash_01.atlas", TextureAtlas.class);
         manager.load("splash_02.atlas", TextureAtlas.class);
         manager.load("splash_03.atlas", TextureAtlas.class);
+        manager.load("rock_01.atlas", TextureAtlas.class);
 
         manager.load("skin/flat-earth-ui.json", Skin.class);
+        //manager.load("newphys.json", Body.class);
 
         manager.finishLoading();
     }

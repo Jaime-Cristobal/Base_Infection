@@ -60,7 +60,7 @@ public final class Mob
         if(ifEffect)
         {
             //Gdx.app.error("RENDERING", "EFFECT");
-            effect.recordEndTime();
+            //effect.recordEndTime();
             effect.render(main.batch, x, y);
 
             if(effect.ifFinished())

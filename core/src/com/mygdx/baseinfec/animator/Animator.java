@@ -110,8 +110,11 @@ public final class Animator
     }
 
     /**
-     * NOTE: Should be considered for a name change.
-     * @param call will set the a
+     * NOTE: Should be considered for a name change. Also consider creating
+     *       region finder for sprites with one animation set.
+     * @param call will set the sprite to the region animation. This should be
+     *             the name of region in the format [name]_0, [name]_1.....etc.
+     *             Note: Ideal for sprite packs with multiple animations.
      * */
     public void findRegion(String call)
     {
@@ -159,6 +162,12 @@ public final class Animator
                 width / 2, height / 2, width, height, 1f, 1f, angle, false);
     }
 
+    /**
+     * Used mainly with function ifFrameEnd() below. Will set the endTime to
+     * what time the animation ended.
+     *
+     * Obsolete
+     * */
     public void recordEndTime()
     {
         if(animation.get(playback).isAnimationFinished(elapsed_time))
@@ -167,12 +176,21 @@ public final class Animator
         }
     }
 
+    /**
+     * Best paired with func ifFinished() below. For non-looping animations, placing ifFinished
+     * inside an if statement with resetTime() inside will ensure the animation plays again.
+     * */
     public void resetTime()
     {
         endTime = -1;
         elapsed_time = 0;
     }
 
+    /**
+     * @return true -> if the elapse_time has reach the end of the animation
+     *
+     * Obsolete
+     * */
     public boolean ifFrameEnd()
     {
         if(endTime == elapsed_time)

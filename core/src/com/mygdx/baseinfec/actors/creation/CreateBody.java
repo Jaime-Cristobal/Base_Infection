@@ -111,4 +111,9 @@ public class CreateBody
     public Filter getFilter() {
         return fixDef.filter;
     }
+
+    public void setActive(boolean active)
+    {
+        body.setActive(active);
+    }
 }

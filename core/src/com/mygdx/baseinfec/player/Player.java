@@ -3,27 +3,19 @@ package com.mygdx.baseinfec.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.baseinfec.Main;
 import com.mygdx.baseinfec.actors.creation.CreateAnimation;
-import com.mygdx.baseinfec.actors.creation.CreateTexture;
 import com.mygdx.baseinfec.animator.Animator;
-import com.mygdx.baseinfec.collision.FilterDetector;
 import com.mygdx.baseinfec.collision.FilterID;
 import com.mygdx.baseinfec.collision.HitboxID;
 import com.mygdx.baseinfec.ui.Scaler;
-
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 
 /**
@@ -42,30 +34,12 @@ public class Player implements GestureListener, InputProcessor
     private Animator fire;
 
     private CreateAnimation actor;
-    private ArrayMap<String, Float> region = new ArrayMap<String, Float>();
     private InputControl controls;
 
-    private ArrayMap<String, Float> frames;
-
     private String file;
-    private float originX;
-    private float originY;
+    private float originX, originY = 0;
 
     private int velocity = 0;
-
-    private int lastInput = -1;
-
-    private float xFirstTouch = 0;
-    private float yFirstTouch = 0;
-
-    float deltaX = 0;
-    float deltaY = 0;
-    float rotation = 0;
-
-    private float touchX = 0;
-    private int x = 100;
-
-    private float angle = 100;
 
     private GestureDetector detector = new GestureDetector(this);
 
@@ -76,9 +50,6 @@ public class Player implements GestureListener, InputProcessor
         file = "whale_player.atlas";
 
         controls = new InputControl();
-
-        originX = 0;
-        originY = 0;
 
         actor = new CreateAnimation(file, main, BodyDef.BodyType.DynamicBody);
         actor.addRegion("Armature_move", 3.0f);
@@ -101,49 +72,60 @@ public class Player implements GestureListener, InputProcessor
         actor.setRegion("Armature_move");
     }
 
-    public void display(int playerInput, float delta, int rotate, int speed, Vector3 target, int direc)
+    /**
+     * NOTE: consider taking out case 4 in the switch statement
+     *
+     * @param playerInput is the touch input from HUD.java.
+     * @param delta is the delta time from render in MapStage.java.
+     *              This is the same as Gdx.graphics.getDeltaTime
+     * */
+    public void display(int playerInput, float delta)
     {
-        switch (playerInput)
+        movement(playerInput, delta);
+
+        actor.getBody().setLinearVelocity(
+                MathUtils.cos(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity,
+                MathUtils.sin(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity);
+        actor.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+
+        //fire.render(main.batch, actor.getX() - 7, actor.getY() - 0.5f, actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+    }
+
+    /**
+     * Look at the comment header in the function display(...) above for
+     * parameter descriptions.
+     * */
+    private void movement(int input, float delta)
+    {
+        switch (input)
         {
             default:
                 break;
-            case -1:
+            case -1:        //Stops the player from turning
                 actor.getBody().setAngularVelocity(0);
                 break;
-            case 0:
+            case 0:         //Goes to the right
                 actor.getBody().setAngularVelocity(200 * delta);
                 break;
-            case 1:
+            case 1:         //Goes to the left
                 actor.getBody().setAngularVelocity(-200 * delta);
                 break;
-            case 2:
+            case 2:         //Slows down the player
                 if(velocity > 0)
                     velocity -= 5;
                 break;
-            case 3:
+            case 3:         //Speeds up the player
                 velocity += 10;
-                //fire.render(main.batch, actor.getX(), actor.getY());
                 break;
-            case 4:
+            case 4:         //Instant stop
                 velocity = 0;
                 break;
         }
 
-        if(velocity > 0)
+        if(velocity > 0)    //the player will naturally slow down when not speeding up
             velocity -= 1;
         else
             velocity = 0;
-
-        //System.out.println(velocity);
-        actor.getBody().setLinearVelocity(MathUtils.cos(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity,
-                MathUtils.sin(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity);
-
-        actor.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
-        //actor.display();
-
-        //fire.render(main.batch, actor.getX() - 7, actor.getY() - 0.5f, actor.getBody().getAngle() * MathUtils.radiansToDegrees);
-
-        //Gdx.app.log("Velocity", "" + actor.getBody().getPosition());
     }
 
     public Vector2 returnCoord()
@@ -161,11 +143,9 @@ public class Player implements GestureListener, InputProcessor
         return actor.getBody().getAngle();
     }
 
-    public void applyJump()
-    {
-        actor.applyForce(0, 60);
-    }
-
+    /**
+     * Box2d physics will no longer apply to the player when called
+     * */
     public void setInactive()
     {
         actor.setActive(false);
@@ -231,10 +211,6 @@ public class Player implements GestureListener, InputProcessor
      * @param count the number of taps. */
     public boolean tap (float x, float y, int count, int button)
     {
-        //if(count == 2)
-        //    actor.getBody().setLinearVelocity(MathUtils.cos(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * 500,
-        //            MathUtils.sin(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * 500);
-
         return false;
     }
 
@@ -249,10 +225,7 @@ public class Player implements GestureListener, InputProcessor
      * @param velocityY velocity on y in seconds */
     public boolean fling (float velocityX, float velocityY, int button)
     {
-        //System.out.println("CL");
-        //actor.getBody().setAngularVelocity(-rotation * Gdx.graphics.getDeltaTime());
-
-        return true;
+        return false;
     }
 
     /** Called when the user drags a finger over the screen.
@@ -328,17 +301,7 @@ public class Player implements GestureListener, InputProcessor
      * @return whether the input was processed */
     public boolean touchDown (int screenX, int screenY, int pointer, int button)
     {
-        touchX = screenX / Scaler.PIXELS_TO_METERS;
-        //System.out.println("touchdown");
-        //System.out.println(pointer);
-
-        //xFirstTouch = screenX;
-        //yFirstTouch = screenY;
-        //Gdx.app.log("" + xFirstTouch, "" + yFirstTouch);
-        //System.out.println("touch");
-        //rotation *= -1;     //Use this to flip direction to spin
-
-        return true;
+        return false;
     }
 
     /** Called when a finger was lifted or a mouse button was released. The button parameter will be {@link Input.Buttons#LEFT} on iOS.
@@ -354,49 +317,7 @@ public class Player implements GestureListener, InputProcessor
      * @return whether the input was processed */
     public boolean touchDragged (int screenX, int screenY, int pointer)
     {
-        //System.out.println("DRAGGING");
-        //actor.getBody().setLinearVelocity(0, 0);
-        touchX = screenX / Scaler.PIXELS_TO_METERS;
-
-        //deltaX = (screenX / Scaler.PIXELS_TO_METERS) - actor.getX();
-        //deltaY = (screenY / Scaler.PIXELS_TO_METERS) - actor.getY();
-        //rotation = MathUtils.atan2(deltaY, deltaX);
-
-        /**
-        if(screenX / Scaler.PIXELS_TO_METERS < 20)
-        {
-            rotation *= -1;
-            rotation += 0.5f;
-        }
-        else
-            rotation -= 0.5f;
-         */
-
-        //int x = 100;
-
-        /**
-        if(screenX / Scaler.PIXELS_TO_METERS < 20)
-        {
-            x *= -1;
-        }
-
-        actor.getBody().setAngularVelocity(x * Gdx.graphics.getDeltaTime());
-         */
-
-        //Gdx.app.log("" + screenX / Scaler.PIXELS_TO_METERS, "" + actor.getX());
-
-        //rotVal += 1.2f;
-        //System.out.println(rotation);
-        //System.out.println(screenX / Scaler.PIXELS_TO_METERS);
-
-        //if(rotVal < 0)
-        //    rotVal += 1.28;
-
-        //actor.getBody().setAngularVelocity(screenX / Scaler.PIXELS_TO_METERS);
-        //actor.getBody().setAngularVelocity(rotation * Gdx.graphics.getDeltaTime() * 100);
-        //actor.getBody().setTransform(actor.getBody().getPosition(), -rotVal);
-
-        return true;
+        return false;
     }
 
     /** Called when the mouse was moved without any buttons being pressed. Will not be called on iOS.
