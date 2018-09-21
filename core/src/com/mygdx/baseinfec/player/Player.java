@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.baseinfec.BodyEditorLoader;
 import com.mygdx.baseinfec.Main;
 import com.mygdx.baseinfec.actors.creation.CreateAnimation;
 import com.mygdx.baseinfec.animator.Animator;
@@ -43,6 +44,8 @@ public class Player implements GestureListener, InputProcessor
 
     private GestureDetector detector = new GestureDetector(this);
 
+    private BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("player.json"));
+
     public Player(Main main_p)
     {
         this.main = main_p;
@@ -66,9 +69,10 @@ public class Player implements GestureListener, InputProcessor
                 FilterID.ceiling_category | FilterID.enemy_category | FilterID.platform_category
                 | FilterID.coin_category | FilterID.collector_category | FilterID.bandit_category));
 
-        actor.setData(0.5f, 0, true);
+        actor.setData(0.1f, 0, true);
         actor.setUniqueID(HitboxID.player);
         actor.create(world, posX, posY, w, h, false);
+        //actor.create(world, loader, "body01", posX, posY, w, h, false);
         actor.setRegion("Armature_move");
     }
 
@@ -87,6 +91,7 @@ public class Player implements GestureListener, InputProcessor
                 MathUtils.cos(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity,
                 MathUtils.sin(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity);
         actor.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+        //actor.displayCustom(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
 
         //fire.render(main.batch, actor.getX() - 7, actor.getY() - 0.5f, actor.getBody().getAngle() * MathUtils.radiansToDegrees);
     }

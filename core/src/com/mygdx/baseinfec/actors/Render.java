@@ -36,4 +36,18 @@ public final class Render
                 sprite.getScaleX(), sprite.getScaleY(),
                 sprite.getRotation());
     }
+
+    public void renderCustomBod(Main project, Sprite sprite, Body body, float width, float height)
+    {
+        sprite.setPosition((body.getPosition().x  / Scaler.scaleX * Scaler.PIXELS_TO_METERS) - width/2,
+                (body.getPosition().y / Scaler.scaleY * Scaler.PIXELS_TO_METERS) -height/2);
+
+        sprite.setOrigin(width / 2, height / 2);    //sets the rotation at  the sprite's center
+
+        project.batch.draw(sprite, sprite.getX() * Scaler.scaleX, sprite.getY() * Scaler.scaleY,
+                sprite.getOriginX(), sprite.getOriginY(),
+                width * Scaler.scaleX, height * Scaler.scaleY,
+                sprite.getScaleX(), sprite.getScaleY(),
+                sprite.getRotation());
+    }
 }

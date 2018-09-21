@@ -1,12 +1,14 @@
 package com.mygdx.baseinfec.actors.creation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.baseinfec.BodyEditorLoader;
 import com.mygdx.baseinfec.ui.Scaler;
 
 /**
@@ -97,6 +99,63 @@ public class CreateBody
     public void createCircle(World world, float x, float y, float w, float h, boolean isSensor)
     {
 
+    }
+
+    public void setBody(World world, BodyEditorLoader loader, String file, float x , float y, boolean isSensor)
+    {
+        bodydef.type = type;
+        bodydef.position.set(x / Scaler.PIXELS_TO_METERS,
+                y / Scaler.PIXELS_TO_METERS);                  //box collision at the same dimension as the sprite
+        body = world.createBody(bodydef);
+
+        fixDef.shape = shape;
+        fixDef.restitution = restitution;
+        fixDef.density = density;
+        fixDef.isSensor = isSensor;
+        fixDef.filter.categoryBits = category;       //short something = CATEGORY
+        fixDef.filter.maskBits = mask;
+
+        loader.attachFixture(body, file, fixDef, Scaler.PIXELS_TO_METERS * 8);
+    }
+
+    public void setTriangle(World world, float x, float y, boolean isSensor)
+    {
+        bodydef.type = type;
+        bodydef.position.set(x / Scaler.PIXELS_TO_METERS,
+                y / Scaler.PIXELS_TO_METERS);                  //box collision at the same dimension as the sprite
+
+        body = world.createBody(bodydef);
+
+        Vector2[] verticies = new Vector2[3];
+        verticies[0].set(0, 0);
+        verticies[1].set(3, 3);
+        verticies[2].set(6, 6);
+
+
+        shape = new PolygonShape();
+        //shape.setAsBox(w / 2 / Scaler.PIXELS_TO_METERS * Scaler.scaleX,
+        //        h / 2 / Scaler.PIXELS_TO_METERS * Scaler.scaleY);      //box collision at the same dimension as the sprite
+        //shape.set();
+
+        fixDef.shape = shape;
+        fixDef.restitution = restitution;
+        fixDef.density = density;
+        fixDef.isSensor = isSensor;
+        fixDef.filter.categoryBits = category;       //short something = CATEGORY
+        fixDef.filter.maskBits = mask;
+
+        if(ID == null)
+        {
+            Gdx.app.error("Class CreateBody.java", "There is no UserData ID!");
+        }
+
+        body.createFixture(fixDef).setUserData(ID);
+
+        body.setUserData(ID);
+
+        body.setActive(false);      //will not move if the body is not active.
+
+        shape.dispose();
     }
 
     /**UserData will get resetted every time a map is called

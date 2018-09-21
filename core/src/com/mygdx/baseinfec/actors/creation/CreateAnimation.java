@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.mygdx.baseinfec.BodyEditorLoader;
 import com.mygdx.baseinfec.Main;
 import com.mygdx.baseinfec.animator.Animator;
 import com.mygdx.baseinfec.ui.Scaler;
@@ -91,6 +92,17 @@ public class CreateAnimation implements CreateActor
         box2dBody.body.setActive(true);
     }
 
+    public void create(World world, BodyEditorLoader loader, String file, float xPos, float yPos, float w, float h, boolean sensor)
+    {
+        animate.setScale(w, h);
+
+        x = xPos + (width / 2);
+        y = yPos + (height / 2);
+
+        box2dBody.setBody(world, loader, file, x, y, sensor);
+        box2dBody.body.setActive(true);
+    }
+
     public void display()
     {
         animate.render(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y);
@@ -99,6 +111,11 @@ public class CreateAnimation implements CreateActor
     public void display(float angle)
     {
         animate.render(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y, angle);
+    }
+
+    public void displayCustom(float angle)
+    {
+        animate.renderCustomBod(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y, angle);
     }
 
     /**false sets the box2D body to sleep (unmovable)*/

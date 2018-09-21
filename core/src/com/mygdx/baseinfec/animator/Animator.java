@@ -162,6 +162,22 @@ public final class Animator
                 width / 2, height / 2, width, height, 1f, 1f, angle, false);
     }
 
+    public void renderCustomBod(Batch batch, float x, float y, float angle)
+    {
+        elapsed_time += Gdx.graphics.getDeltaTime();
+
+        if(angle < 0)
+        {
+            angle += 360;
+        }
+
+        batch.draw((TextureRegion) animation.get(playback).getKeyFrame(elapsed_time, true),
+                ((x * Scaler.PIXELS_TO_METERS) - width/39) + box2dScale,
+                (y * Scaler.PIXELS_TO_METERS) - height/39,
+                width, height, width, height, 1f, 1f, angle, false);
+    }
+
+
     /**
      * Used mainly with function ifFrameEnd() below. Will set the endTime to
      * what time the animation ended.

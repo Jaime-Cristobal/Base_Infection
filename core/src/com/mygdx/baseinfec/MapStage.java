@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -63,6 +64,8 @@ public class MapStage implements Screen
     final private Mob mob;
     final private CreateAnimation rock_01;
     private float angle = 0;
+
+    private BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("newphys.json"));
 
     final private float lerp  = 0.1f;
     private Vector3 camPosition;
@@ -118,10 +121,10 @@ public class MapStage implements Screen
         rock_01 = new CreateAnimation("rock_01.atlas", main, BodyDef.BodyType.DynamicBody);
         rock_01.addRegion("Armature_wave", 3.2f);
         rock_01.setData(1, 0, false);
-        rock_01.setFilter(FilterID.platform_category, FilterID.player_category);
+        //rock_01.setFilter(FilterID.platform_category, FilterID.player_category);
         rock_01.setUniqueID(5);
-        rock_01.create(world, 140, 90, 769, 729, false);
-        rock_01.setSpeed(10, 10);
+        rock_01.create(world, loader, "rock", 80, 90, 763, 729, false);
+        //rock_01.setSpeed(10, 10);
     }
 
     /** Called when this screen becomes the current screen for a {@link Game}. */
@@ -172,7 +175,8 @@ public class MapStage implements Screen
 
         angle += 0.05f;
 
-        rock_01.display(angle);
+        rock_01.getBody().setAngularVelocity(0);
+        rock_01.displayCustom(rock_01.getBody().getAngle() * MathUtils.radiansToDegrees);
 
         hud.renderSprite(main);
         main.batch.end();
