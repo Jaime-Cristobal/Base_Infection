@@ -115,7 +115,7 @@ public class CreateBody
         fixDef.filter.categoryBits = category;       //short something = CATEGORY
         fixDef.filter.maskBits = mask;
 
-        loader.attachFixture(body, file, fixDef, Scaler.PIXELS_TO_METERS * 8);
+        loader.attachFixture(body, file, fixDef, Scaler.PIXELS_TO_METERS * 7.7f);
     }
 
     public void setTriangle(World world, float x, float y, boolean isSensor)

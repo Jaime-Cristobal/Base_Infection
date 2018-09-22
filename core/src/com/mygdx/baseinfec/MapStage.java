@@ -106,7 +106,7 @@ public class MapStage implements Screen
         {
             sides.add(new CreateBody(BodyDef.BodyType.StaticBody));
             sides.get(n).setData(1, 0, true);
-            sides.get(n).setFilter(FilterID.floor_category, FilterID.player_category);
+            sides.get(n).setFilter(FilterID.floor_category, (short) (FilterID.player_category | FilterID.platform_category));
         }
 
         sides.get(0).create(world, 800, 0, 2500, 20, false);       //bottom blocker
@@ -119,12 +119,12 @@ public class MapStage implements Screen
             iter.setActive(true);
 
         rock_01 = new CreateAnimation("rock_01.atlas", main, BodyDef.BodyType.DynamicBody);
-        rock_01.addRegion("Armature_wave", 3.2f);
+        rock_01.addRegion("Armature_wave", 3.5f);
         rock_01.setData(1, 0, false);
-        //rock_01.setFilter(FilterID.platform_category, FilterID.player_category);
+        rock_01.setFilter(FilterID.platform_category, (short)(FilterID.player_category | FilterID.floor_category));
         rock_01.setUniqueID(5);
         rock_01.create(world, loader, "rock", 80, 90, 763, 729, false);
-        //rock_01.setSpeed(10, 10);
+        rock_01.setSpeed(10, 10);
     }
 
     /** Called when this screen becomes the current screen for a {@link Game}. */
@@ -137,7 +137,7 @@ public class MapStage implements Screen
         ray.setBlur(true);
         ray.setBlurNum(2);
 
-        player.getBody().setUserData(1);
+        //player.getBody().setUserData(1);
 
         mob.spawnRandomly(50, 300, 350, 700, 10);
         mob.setTarget(base.getRandomPos());
@@ -156,7 +156,7 @@ public class MapStage implements Screen
         main.batch.setProjectionMatrix( viewport.getCamera().combined);                    //allows camera to move
         ray.setCombinedMatrix(viewport.getCamera().combined);
 
-        debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
+        //debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
 
         camMovement(delta);
         viewport.getCamera().update();
@@ -175,7 +175,7 @@ public class MapStage implements Screen
 
         angle += 0.05f;
 
-        rock_01.getBody().setAngularVelocity(0);
+        rock_01.getBody().setAngularVelocity(0.1f);
         rock_01.displayCustom(rock_01.getBody().getAngle() * MathUtils.radiansToDegrees);
 
         hud.renderSprite(main);
@@ -206,7 +206,7 @@ public class MapStage implements Screen
         ray.updateAndRender();
         hud.render(main, camPosition, player.getX(), player.getY(), player.getVelocity());
 
-        debugRenderer.render(world, debugMatrix);
+        //debugRenderer.render(world, debugMatrix);
     }
 
     /** @see ApplicationListener#resize(int, int) */
