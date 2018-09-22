@@ -1,0 +1,54 @@
+
+rock_01.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Armature_wave
+  rotate: false
+  xy: 1, 771
+  size: 729, 768
+  orig: 729, 768
+  offset: 0, 0
+  index: 0
+Armature_wave
+  rotate: false
+  xy: 1, 1
+  size: 729, 768
+  orig: 729, 768
+  offset: 0, 0
+  index: 1
+Armature_wave
+  rotate: false
+  xy: 732, 771
+  size: 729, 768
+  orig: 729, 768
+  offset: 0, 0
+  index: 2
+Armature_wave
+  rotate: false
+  xy: 732, 1
+  size: 729, 768
+  orig: 729, 768
+  offset: 0, 0
+  index: 3
+Armature_wave
+  rotate: false
+  xy: 1463, 771
+  size: 729, 768
+  orig: 729, 768
+  offset: 0, 0
+  index: 4
+Armature_wave
+  rotate: false
+  xy: 1463, 1
+  size: 729, 768
+  orig: 729, 768
+  offset: 0, 0
+  index: 5
+Armature_wave
+  rotate: false
+  xy: 2194, 771
+  size: 729, 768
+  orig: 729, 768
+  offset: 0, 0
+  index: 6
