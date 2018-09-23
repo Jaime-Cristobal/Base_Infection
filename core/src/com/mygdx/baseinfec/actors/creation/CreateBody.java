@@ -62,7 +62,11 @@ public class CreateBody
 
     /**Bodydef.BodyType sets whether the body tpye is static, kinematic, or dynamic
      *
-     * You still have to fix the resolution scaling for data*/
+     * You still have to fix the resolution scaling for data
+     *
+     * @param isSensor if false -> the body will register a collision with another body
+     *                 but will not be affected by physics (ex. non-sensored body will not
+     *                 be stopped by another body)*/
     public void create(World world, float x, float y, float w, float h, boolean isSensor)
     {
         bodydef.type = type;
@@ -88,11 +92,8 @@ public class CreateBody
         }
 
         body.createFixture(fixDef).setUserData(ID);
-
         body.setUserData(ID);
-
         body.setActive(false);      //will not move if the body is not active.
-
         shape.dispose();
     }
 
@@ -101,6 +102,17 @@ public class CreateBody
 
     }
 
+    /**This is for custom bodies created from the Physics Body Editor by Aurelien Ribon.
+     * -----------------------
+     * Links:
+     * http://www.aurelienribon.com/post/2012-04-physics-body-editor-pre-3-0-update
+     * https://code.google.com/archive/p/box2d-editor/
+     * -----------------------
+     * @param loader is the class loader that loads the .json file that contains the
+     *               custom body created from the Physics Body Editor
+     * @param file is NOT THE NAME OF THE FILE (ex. body.json) but instead the name
+     *             of the body given in the Physics Body Editor
+     * */
     public void setBody(World world, BodyEditorLoader loader, String file, float x , float y, boolean isSensor)
     {
         bodydef.type = type;
@@ -116,46 +128,13 @@ public class CreateBody
         fixDef.filter.maskBits = mask;
 
         loader.attachFixture(body, file, fixDef, Scaler.PIXELS_TO_METERS * 7.7f);
-    }
-
-    public void setTriangle(World world, float x, float y, boolean isSensor)
-    {
-        bodydef.type = type;
-        bodydef.position.set(x / Scaler.PIXELS_TO_METERS,
-                y / Scaler.PIXELS_TO_METERS);                  //box collision at the same dimension as the sprite
-
-        body = world.createBody(bodydef);
-
-        Vector2[] verticies = new Vector2[3];
-        verticies[0].set(0, 0);
-        verticies[1].set(3, 3);
-        verticies[2].set(6, 6);
-
-
-        shape = new PolygonShape();
-        //shape.setAsBox(w / 2 / Scaler.PIXELS_TO_METERS * Scaler.scaleX,
-        //        h / 2 / Scaler.PIXELS_TO_METERS * Scaler.scaleY);      //box collision at the same dimension as the sprite
-        //shape.set();
-
-        fixDef.shape = shape;
-        fixDef.restitution = restitution;
-        fixDef.density = density;
-        fixDef.isSensor = isSensor;
-        fixDef.filter.categoryBits = category;       //short something = CATEGORY
-        fixDef.filter.maskBits = mask;
 
         if(ID == null)
         {
-            Gdx.app.error("Class CreateBody.java", "There is no UserData ID!");
+            Gdx.app.error("Class CreateBody.java" + ", " + file, "There is no UserData ID!");
         }
-
-        body.createFixture(fixDef).setUserData(ID);
-
         body.setUserData(ID);
-
         body.setActive(false);      //will not move if the body is not active.
-
-        shape.dispose();
     }
 
     /**UserData will get resetted every time a map is called
@@ -167,10 +146,12 @@ public class CreateBody
         body.setUserData(ID);
     }
 
+    /**The necessary filters can be called by referencing from the class public variables*/
     public Filter getFilter() {
         return fixDef.filter;
     }
 
+    /**Bodies are */
     public void setActive(boolean active)
     {
         body.setActive(active);

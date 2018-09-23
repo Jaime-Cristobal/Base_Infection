@@ -113,9 +113,10 @@ public class CreateAnimation implements CreateActor
         animate.render(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y, angle);
     }
 
-    public void displayCustom(float angle)
+    public void displayCustom(float angle, float offSetX, float offSetY, float offSetOrigin)
     {
-        animate.renderCustomBod(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y, angle);
+        animate.renderCustomBod(main.batch, box2dBody.body.getPosition().x, box2dBody.body.getPosition().y,
+                offSetX, offSetY, offSetOrigin, angle);
     }
 
     /**false sets the box2D body to sleep (unmovable)*/

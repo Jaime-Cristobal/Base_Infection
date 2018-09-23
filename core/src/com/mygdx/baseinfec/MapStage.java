@@ -80,7 +80,8 @@ public class MapStage implements Screen
         this.main = main;
 
         player = new Player(main);
-        player.createBody(world, 200, 550, 78, 43);
+        //player.createBody(world, 200, 550, 78, 43);
+        player.createBody(world, 200, 330, 27, 38);
 
         hud = new HUD(main, world, viewport);
 
@@ -156,7 +157,7 @@ public class MapStage implements Screen
         main.batch.setProjectionMatrix( viewport.getCamera().combined);                    //allows camera to move
         ray.setCombinedMatrix(viewport.getCamera().combined);
 
-        //debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
+        debugMatrix = main.batch.getProjectionMatrix().cpy().scale(Scaler.PIXELS_TO_METERS, Scaler.PIXELS_TO_METERS, 0);
 
         camMovement(delta);
         viewport.getCamera().update();
@@ -176,7 +177,8 @@ public class MapStage implements Screen
         angle += 0.05f;
 
         rock_01.getBody().setAngularVelocity(0.1f);
-        rock_01.displayCustom(rock_01.getBody().getAngle() * MathUtils.radiansToDegrees);
+        rock_01.displayCustom(rock_01.getBody().getAngle() * MathUtils.radiansToDegrees,
+                385, 365, 512);
 
         hud.renderSprite(main);
         main.batch.end();
@@ -206,7 +208,7 @@ public class MapStage implements Screen
         ray.updateAndRender();
         hud.render(main, camPosition, player.getX(), player.getY(), player.getVelocity());
 
-        //debugRenderer.render(world, debugMatrix);
+        debugRenderer.render(world, debugMatrix);
     }
 
     /** @see ApplicationListener#resize(int, int) */

@@ -163,7 +163,7 @@ public final class Animator
     }
 
     /**Only works for the rock_01.atlas for now. Not tested on other sprites.*/
-    public void renderCustomBod(Batch batch, float x, float y, float angle)
+    public void renderCustomBod(Batch batch, float x, float y, float offSetX, float offSetY, float offSetOrigin, float angle)
     {
         elapsed_time += Gdx.graphics.getDeltaTime();
 
@@ -173,9 +173,10 @@ public final class Animator
         }
 
         batch.draw((TextureRegion) animation.get(playback).getKeyFrame(elapsed_time, true),
-                ((x * Scaler.PIXELS_TO_METERS) - width/2) + box2dScale + 385,
-                (y * Scaler.PIXELS_TO_METERS) - height/2 + 365,
-                width / 512, height / 512, width, height, 1f, 1f, angle, false);
+                ((x * Scaler.PIXELS_TO_METERS) - width/2) + box2dScale + offSetX,
+                (y * Scaler.PIXELS_TO_METERS) - height/2 + offSetY,
+                width / offSetOrigin, height / offSetOrigin, width, height,
+                1f, 1f, angle, false);
     }
 
 

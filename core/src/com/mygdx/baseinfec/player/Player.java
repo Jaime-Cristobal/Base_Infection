@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.baseinfec.BodyEditorLoader;
 import com.mygdx.baseinfec.Main;
 import com.mygdx.baseinfec.actors.creation.CreateAnimation;
-import com.mygdx.baseinfec.animator.Animator;
+import com.mygdx.baseinfec.actors.creation.CreateTexture;
 import com.mygdx.baseinfec.collision.FilterID;
 import com.mygdx.baseinfec.collision.HitboxID;
 import com.mygdx.baseinfec.ui.Scaler;
@@ -32,10 +32,9 @@ public class Player implements GestureListener, InputProcessor
 {
     private final Main main;
 
-    private Animator fire;
+    private CreateAnimation fire;
 
-    private CreateAnimation actor;
-    private InputControl controls;
+    private CreateTexture actor;
 
     private String file;
     private float originX, originY = 0;
@@ -50,17 +49,24 @@ public class Player implements GestureListener, InputProcessor
     {
         this.main = main_p;
         //file = "player4.atlas";
-        file = "whale_player.atlas";
+        //file = "whale_player.atlas";
+        file = "player12.png";
 
-        controls = new InputControl();
+        //actor = new CreateAnimation(file, main, BodyDef.BodyType.DynamicBody);
+        //actor.addRegion("Armature_move", 3.0f);
 
-        actor = new CreateAnimation(file, main, BodyDef.BodyType.DynamicBody);
-        actor.addRegion("Armature_move", 3.0f);
+        actor = new CreateTexture(file, main, BodyDef.BodyType.DynamicBody);
 
-        fire = new Animator("splash_01.atlas", main);
-        fire.addRegion("Anim_splash", 4.5f);
-        fire.findRegion("Anim_splash");
-        fire.setOrigin(fire.getWidth() - 1, fire.getHeight() / 2);
+        /**
+         fire = new Animator("trace.atlas", main);
+         fire.addRegion("trace", 4.5f);
+         fire.findRegion("trace");
+         fire.setOrigin(fire.getWidth() - 1, fire.getHeight() / 2);*/
+
+        //fire = new CreateAnimation("trace.atlas", main, BodyDef.BodyType.DynamicBody);
+        //fire.addRegion("trace", 4.5f);
+        //fire.setData(0, 0, false);
+
     }
 
     public void createBody(World world, float posX, float posY, float w, float h)
@@ -73,7 +79,7 @@ public class Player implements GestureListener, InputProcessor
         actor.setUniqueID(HitboxID.player);
         actor.create(world, posX, posY, w, h, false);
         //actor.create(world, loader, "body01", posX, posY, w, h, false);
-        actor.setRegion("Armature_move");
+        //actor.setRegion("Armature_move");
     }
 
     /**
@@ -90,10 +96,17 @@ public class Player implements GestureListener, InputProcessor
         actor.getBody().setLinearVelocity(
                 MathUtils.cos(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity,
                 MathUtils.sin(actor.getBody().getAngle()) * Gdx.graphics.getDeltaTime() * velocity);
-        actor.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
-        //actor.displayCustom(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
 
         //fire.render(main.batch, actor.getX() - 7, actor.getY() - 0.5f, actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+        //fire.renderCustomBod(main.batch, actor.getX(), actor.getY(), 0, + 20, 6,
+        //        actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+        //fire.getBody().setTransform(actor.getBody().getPosition().x, actor.getBody().getPosition().y, actor.getBody().getAngle());
+        //fire.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+        //fire.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+
+        actor.display();
+        //actor.display(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
+        //actor.displayCustom(actor.getBody().getAngle() * MathUtils.radiansToDegrees);
     }
 
     /**
@@ -170,11 +183,6 @@ public class Player implements GestureListener, InputProcessor
     public InputProcessor getInputProcessor()
     {
         return this;
-    }
-
-    public Vector2 getInputPosition()
-    {
-        return controls.getPosition();
     }
 
     public float getX()

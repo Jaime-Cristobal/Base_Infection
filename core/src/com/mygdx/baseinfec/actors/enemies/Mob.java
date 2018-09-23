@@ -25,9 +25,9 @@ public final class Mob
 
     public Mob(Main main, World world, int amount)
     {
-        effect = new Animator("splash_01.atlas", main);
-        effect.addRegion("Anim_splash", 3.4f);
-        effect.findRegion("Anim_splash");
+        effect = new Animator("effect.atlas", main);
+        effect.addRegion("effect", 3.4f);
+        effect.findRegion("effect");
 
         for(int n = 0; n < amount; n++)
         {

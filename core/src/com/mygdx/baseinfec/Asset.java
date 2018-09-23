@@ -46,6 +46,7 @@ public class Asset
         manager.load("player1.png", Texture.class);
         manager.load("rocket_lvl_1.png", Texture.class);
         manager.load("map58.png", Texture.class);
+        manager.load("player12.png", Texture.class);
 
         manager.load("player.atlas", TextureAtlas.class);
         manager.load("fx1.atlas", TextureAtlas.class);
@@ -57,6 +58,9 @@ public class Asset
         manager.load("splash_02.atlas", TextureAtlas.class);
         manager.load("splash_03.atlas", TextureAtlas.class);
         manager.load("rock_01.atlas", TextureAtlas.class);
+        manager.load("trace.atlas", TextureAtlas.class);
+        manager.load("effect.atlas", TextureAtlas.class);
+
 
         manager.load("skin/flat-earth-ui.json", Skin.class);
         //manager.load("newphys.json", Body.class);
